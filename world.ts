@@ -84,3 +84,71 @@ export function getCoordsToRight(kara: Kara): [number, number] {
 export function getCell(world: World, x: number, y: number) {
   return world.grid[y]?.[x]; // optional chaining = undefined, wenn out of bounds
 }
+
+export function worldFromAscii(ascii: string): World {
+  const rows = ascii.trim().split("\n");
+  const height = rows.length;
+  const width = Math.max(...rows.map((r) => r.length));
+
+  const grid: Cell[][] = [];
+  let kara: Kara | null = null;
+
+  for (let y = 0; y < height; y++) {
+    const line = rows[y];
+    if (line === undefined) {
+      break;
+    }
+    const row: Cell[] = [];
+    for (let x = 0; x < width; x++) {
+      const ch = line[x] ?? "_";
+      if (ch === "_" || ch === ".") {
+        row.push({});
+      } else if (ch === "T") {
+        row.push({ tree: true });
+      } else if (ch === "L") {
+        row.push({ leaf: true });
+      } else if ("NESW".includes(ch)) {
+        row.push({});
+        kara = { x, y, dir: ch as Dir };
+      } else {
+        throw new Error(`Unbekanntes Zeichen '${ch}' bei (${x},${y})`);
+      }
+    }
+    grid.push(row);
+  }
+
+  if (!kara) {
+    throw new Error("Kein Kara-Startpunkt (N/E/S/W) gefunden.");
+  }
+
+  return {
+    width,
+    height,
+    grid,
+    kara,
+    leavesPicked: 0,
+  };
+}
+
+export function worldToAscii(world: World): string {
+  const rows: string[] = [];
+
+  for (let y = 0; y < world.height; y++) {
+    let line = "";
+    for (let x = 0; x < world.width; x++) {
+      // Kara?
+      if (world.kara.x === x && world.kara.y === y) {
+        line += world.kara.dir;
+        continue;
+      }
+
+      const cell = world.grid[y]?.[x];
+      if (cell?.tree) line += "T";
+      else if (cell?.leaf) line += "L";
+      else line += "_";
+    }
+    rows.push(line);
+  }
+
+  return rows.join("\n");
+}
