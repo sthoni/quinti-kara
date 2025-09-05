@@ -1,4 +1,4 @@
-import type { Kara, World } from "./world";
+import { type Cell, getCell, getCoordsInFront, type World } from "./world";
 
 export function checkTree(world: World): boolean {
   const [x, y] = getCoordsInFront(world.kara);
@@ -9,19 +9,9 @@ export function checkTree(world: World): boolean {
   return false;
 }
 
-function getCoordsInFront(kara: Kara): [number, number] {
-  switch (kara.dir) {
-    case "E":
-      return [kara.x + 1, kara.y];
-    case "N":
-      return [kara.x, kara.y - 1];
-    case "S":
-      return [kara.x, kara.y + 1];
-    case "W":
-      return [kara.x - 1, kara.y];
+export function checkLeaf(world: World): boolean {
+  if (world.grid[world.kara.y]?.[world.kara.x]?.leaf) {
+    return true;
   }
-}
-
-function getCell(world: World, x: number, y: number) {
-  return world.grid[y]?.[x]; // optional chaining = undefined, wenn out of bounds
+  return false;
 }

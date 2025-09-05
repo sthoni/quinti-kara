@@ -41,3 +41,46 @@ const example_world: World = {
   kara: { x: 0, y: 0, dir: "E" },
   leavesPicked: 0,
 };
+
+export function getCoordsInFront(kara: Kara): [number, number] {
+  switch (kara.dir) {
+    case "E":
+      return [kara.x + 1, kara.y];
+    case "N":
+      return [kara.x, kara.y - 1];
+    case "S":
+      return [kara.x, kara.y + 1];
+    case "W":
+      return [kara.x - 1, kara.y];
+  }
+}
+
+export function getCoordsToLeft(kara: Kara): [number, number] {
+  switch (kara.dir) {
+    case "E":
+      return [kara.x, kara.y - 1];
+    case "N":
+      return [kara.x - 1, kara.y];
+    case "S":
+      return [kara.x + 1, kara.y];
+    case "W":
+      return [kara.x, kara.y + 1];
+  }
+}
+
+export function getCoordsToRight(kara: Kara): [number, number] {
+  switch (kara.dir) {
+    case "E":
+      return [kara.x, kara.y + 1];
+    case "N":
+      return [kara.x + 1, kara.y];
+    case "S":
+      return [kara.x - 1, kara.y];
+    case "W":
+      return [kara.x, kara.y - 1];
+  }
+}
+
+export function getCell(world: World, x: number, y: number) {
+  return world.grid[y]?.[x]; // optional chaining = undefined, wenn out of bounds
+}
