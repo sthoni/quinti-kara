@@ -28,5 +28,16 @@ export function turn_left(current_world: World): World {
 }
 
 export function pick_leaf(current_world: World): World {
-  return current_world;
+  const kara = current_world.kara;
+  const new_grid = [...current_world.grid];
+  new_grid[kara.y] = [...new_grid[kara.y]];
+
+  const { leaf, ...cellWithoutLeaf } = new_grid[kara.y][kara.x];
+  new_grid[kara.y][kara.x] = cellWithoutLeaf;
+
+  return {
+    ...current_world,
+    grid: new_grid,
+    leavesPicked: current_world.leavesPicked + 1,
+  };
 }

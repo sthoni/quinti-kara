@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { move, turn_left } from "./action";
+import { move, turn_left, pick_leaf } from "./action";
 import { worldFromAscii } from "./world";
 
 describe("Kara moves through the world", () => {
@@ -138,6 +138,32 @@ _E__
       world = turn_left(world); // S -> E
 
       expect(world).toEqual(current_world);
+    });
+  });
+
+  describe("Kara picks leaves", () => {
+    test("Kara picks a leaf when standing on it", () => {
+      const current_world_ascii = `
+____
+EL__
+____
+      `;
+      const current_world = worldFromAscii(current_world_ascii);
+      // Manually place Kara on the leaf position
+      current_world.kara = { x: 1, y: 1, dir: "E" };
+
+      const expected_world_ascii = `
+____
+_E__
+____
+      `;
+      const expected_world = worldFromAscii(expected_world_ascii);
+      expected_world.leavesPicked = 1;
+
+      const picked_world = pick_leaf(current_world);
+
+      expect(picked_world.leavesPicked).toBe(1);
+      expect(picked_world).toEqual(expected_world);
     });
   });
 });
