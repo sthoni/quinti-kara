@@ -1,7 +1,7 @@
 import { type Cell, getCell, getCoordsInFront, type World } from "./world";
 
 export function checkTree(world: World): boolean {
-  const [x, y] = getCoordsInFront(world.kara);
+  const [x, y] = getCoordsInFront(world);
   const cellInFront = getCell(world, x, y);
   if (cellInFront?.tree) {
     return true;

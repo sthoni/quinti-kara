@@ -42,15 +42,28 @@ const example_world: World = {
   leavesPicked: 0,
 };
 
-export function getCoordsInFront(kara: Kara): [number, number] {
+export function getCoordsInFront(world: World): [number, number] {
+  const kara = world.kara;
   switch (kara.dir) {
     case "E":
+      if (kara.x === world.width - 1) {
+        return [0, kara.y];
+      }
       return [kara.x + 1, kara.y];
     case "N":
+      if (kara.y === 0) {
+        return [kara.x, world.height - 1];
+      }
       return [kara.x, kara.y - 1];
     case "S":
+      if (kara.y === world.height - 1) {
+        return [kara.x, 0];
+      }
       return [kara.x, kara.y + 1];
     case "W":
+      if (kara.x === 0) {
+        return [world.width - 1, kara.y];
+      }
       return [kara.x - 1, kara.y];
   }
 }

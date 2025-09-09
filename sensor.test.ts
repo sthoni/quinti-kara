@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import { checkLeaf, checkTree } from "./sensor";
-import { worldFromAscii, type World } from "./world";
+import { type World, worldFromAscii } from "./world";
 
 test("checkTree works (not in front)", () => {
   const test_world_ascii = `
