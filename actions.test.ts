@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { move, turn_left, pick_leaf } from "./action";
-import { worldFromAscii } from "./world";
+import { move, pick_leaf, turn_left } from "./action";
+import { getCell, worldFromAscii } from "./world";
 
 describe("Kara moves through the world", () => {
   test("Kara moves east", () => {
@@ -159,7 +159,7 @@ ____
       `;
       const expected_world = worldFromAscii(expected_world_ascii);
       expected_world.leavesPicked = 1;
-
+      getCell(expected_world, 1, 1).leaf = false;
       const picked_world = pick_leaf(current_world);
 
       expect(picked_world.leavesPicked).toBe(1);

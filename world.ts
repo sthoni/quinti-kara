@@ -94,8 +94,32 @@ export function getCoordsToRight(kara: Kara): [number, number] {
   }
 }
 
-export function getCell(world: World, x: number, y: number) {
-  return world.grid[y]?.[x]; // optional chaining = undefined, wenn out of bounds
+/** Hilfsfunktion: wendet Modulo so an, dass auch negative Werte sauber wrapen */
+function wrap(value: number, size: number): number {
+  return ((value % size) + size) % size;
+}
+
+/** Liefert Koordinaten innerhalb des Rasters (mit Wrap-Around) */
+export function wrapCoord(
+  world: World,
+  x: number,
+  y: number,
+): [number, number] {
+  const nx = wrap(x, world.width);
+  const ny = wrap(y, world.height);
+  return [nx, ny];
+}
+
+/** Greift auf eine Zelle zu (mit Wrap-Around, gibt nie undefined zurück) */
+export function getCell(world: World, x: number, y: number): Cell {
+  const [nx, ny] = wrapCoord(world, x, y);
+  if (world.grid[ny] === undefined) {
+    throw new Error(`Invalid cell at (${nx}, ${ny})`);
+  }
+  if (world.grid[ny][nx] === undefined) {
+    throw new Error(`Invalid cell at (${nx}, ${ny})`);
+  }
+  return world.grid[ny][nx];
 }
 
 export function worldFromAscii(ascii: string): World {

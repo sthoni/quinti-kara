@@ -1,17 +1,13 @@
-import { type Cell, getCell, getCoordsInFront, type World } from "./world";
+import { getCell, getCoordsInFront, type World } from "./world";
 
 export function checkTree(world: World): boolean {
-  const [x, y] = getCoordsInFront(world);
-  const cellInFront = getCell(world, x, y);
-  if (cellInFront?.tree) {
-    return true;
-  }
-  return false;
+  const [nx, ny] = getCoordsInFront(world);
+  const cell = getCell(world, nx, ny);
+  return cell.tree === true;
 }
 
 export function checkLeaf(world: World): boolean {
-  if (world.grid[world.kara.y]?.[world.kara.x]?.leaf) {
-    return true;
-  }
-  return false;
+  const { x, y } = world.kara;
+  const cell = getCell(world, x, y);
+  return cell.leaf === true;
 }

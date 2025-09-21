@@ -1,4 +1,4 @@
-import { type Dir, getCoordsInFront, type World } from "./world";
+import { type Dir, getCell, getCoordsInFront, type World } from "./world";
 
 export function move(current_world: World): World {
   const [new_kara_x, new_kara_y] = getCoordsInFront(current_world);
@@ -27,17 +27,14 @@ export function turn_left(current_world: World): World {
   };
 }
 
-export function pick_leaf(current_world: World): World {
-  const kara = current_world.kara;
-  const new_grid = [...current_world.grid];
-  new_grid[kara.y] = [...new_grid[kara.y]];
+export function pick_leaf(world: World): World {
+  const { x, y } = world.kara;
+  const cell = getCell(world, x, y);
 
-  const { leaf, ...cellWithoutLeaf } = new_grid[kara.y][kara.x];
-  new_grid[kara.y][kara.x] = cellWithoutLeaf;
+  if (cell.leaf) {
+    cell.leaf = false;
+    world.leavesPicked += 1;
+  }
 
-  return {
-    ...current_world,
-    grid: new_grid,
-    leavesPicked: current_world.leavesPicked + 1,
-  };
+  return world;
 }
