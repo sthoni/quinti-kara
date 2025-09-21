@@ -34,14 +34,6 @@ export const WorldSchema = v.object({
 });
 export type World = v.InferInput<typeof WorldSchema>;
 
-const example_world: World = {
-  width: 6,
-  height: 1,
-  grid: [[{}, {}, {}, {}, {}, { tree: true }]],
-  kara: { x: 0, y: 0, dir: "E" },
-  leavesPicked: 0,
-};
-
 export function getCoordsInFront(world: World): [number, number] {
   const kara = world.kara;
   switch (kara.dir) {
